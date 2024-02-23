@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: "Email"),
                     keyboardType: TextInputType.emailAddress,
@@ -58,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, top: 15, bottom: 0),
-                  //padding: EdgeInsets.symmetric(horizontal: 15),
+                      left: 25.0, right: 25.0, top: 15, bottom: 0),
+                  //padding: EdgeInsets.symmetric(horizontal: 25),
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: "Password"),
                     keyboardType: TextInputType.text,
@@ -77,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
                   height: 20,
                 ),
                 Container(
-                  height: 50,
-                  width: 250,
+                  height: 40,
+                  width: 200,
                   decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(20)),
@@ -91,20 +91,20 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       'Login',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Text('New User? Register'),
+                const Text('Belum punya akun?'),
                 const SizedBox(
                   height: 10,
                 ),
                 Container(
-                  height: 50,
-                  width: 250,
+                  height: 40,
+                  width: 200,
                   decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(20)),
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       'Register',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 )
