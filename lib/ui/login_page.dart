@@ -25,22 +25,104 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         appBar: AppBar(title: const Text('Login')),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _emailTextField(),
-                  _passwordTextField(),
-                  _buttonLogin(),
-                  const SizedBox(
-                    height: 30,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 60.0),
+                  child: Center(
+                    child: SizedBox(
+                        width: 200,
+                        height: 225,
+                        /*decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(50.0)),*/
+                        child: Image.asset('asset/images/flutter-logo.png')),
                   ),
-                  _menuRegistrasi(),
-                ],
-              ),
+                ),
+                Padding(
+                  //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: TextFormField(
+                    decoration: const InputDecoration(labelText: "Email"),
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _emailTextboxController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  //padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: TextFormField(
+                    decoration: const InputDecoration(labelText: "Password"),
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    controller: _passwordTextboxController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 50,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TextButton(
+                    onPressed: () {
+                      var validate = _formKey.currentState!.validate();
+                      if (validate && !_isLoading) {
+                        _submit();
+                      }
+                    },
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text('New User? Register'),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 50,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegistrasiPage()),
+                      );
+                    },
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ));

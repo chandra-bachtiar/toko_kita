@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:toko_kita/helpers/user_info.dart';
-import 'package:toko_kita/ui/registrasi_page.dart';
 import 'package:toko_kita/ui/login_page.dart';
 import 'package:toko_kita/ui/produk_page.dart';
 

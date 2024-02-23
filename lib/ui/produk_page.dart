@@ -105,12 +105,41 @@ class ItemProduk extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        child: ListTile(
-          title: Text(produk.namaProduk),
-          subtitle: Text(produk.harga.toString()),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 3.0),
+        child: Card(
+          child: ListTile(
+            title: Text(produk.namaProduk),
+            subtitle: Text(formatRupiah(produk.harga)),
+          ),
         ),
       ),
     );
+  }
+
+  String formatRupiah(int amount) {
+    // Ubah angka menjadi string dan reverse agar mudah dimasukkan separator
+    String amountString = amount.toString().split('').reversed.join();
+
+    // Buat variabel untuk menampung hasil format
+    String formattedAmount = '';
+
+    // Lakukan iterasi terhadap string angka yang sudah direverse
+    for (int i = 0; i < amountString.length; i++) {
+      // Tambahkan separator setiap 3 digit
+      if (i % 3 == 0 && i != 0) {
+        formattedAmount += '.';
+      }
+      // Tambahkan digit angka
+      formattedAmount += amountString[i];
+    }
+
+    // Balik kembali string agar urutan digit benar
+    formattedAmount = formattedAmount.split('').reversed.join();
+
+    // Tambahkan prefix 'Rp. ' sebelum angka
+    formattedAmount = 'Rp. $formattedAmount';
+
+    return formattedAmount;
   }
 }
