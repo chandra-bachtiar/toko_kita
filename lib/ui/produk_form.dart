@@ -53,7 +53,7 @@ class _ProdukFormState extends State<ProdukForm> {
       appBar: AppBar(title: Text(judul)),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 25.0, right: 25.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -62,6 +62,7 @@ class _ProdukFormState extends State<ProdukForm> {
                 _kodeProdukTextField(),
                 _namaProdukTextField(),
                 _hargaProdukTextField(),
+                const SizedBox(height: 20.0),
                 _buttonSubmit(),
               ],
             ),
@@ -114,20 +115,29 @@ class _ProdukFormState extends State<ProdukForm> {
   }
 
   Widget _buttonSubmit() {
-    return ElevatedButton(
-      child: Text(tombolSubmit),
-      onPressed: () {
-        var validate = _formKey.currentState!.validate();
-        if (validate) {
-          if (!_isLoading) {
-            if (widget.produk != null) {
-              _update();
-            } else {
-              _submit();
+    return Container(
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+          color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+      child: TextButton(
+        onPressed: () {
+          var validate = _formKey.currentState!.validate();
+          if (validate) {
+            if (!_isLoading) {
+              if (widget.produk != null) {
+                _update();
+              } else {
+                _submit();
+              }
             }
           }
-        }
-      },
+        },
+        child: const Text(
+          'Simpan',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+      ),
     );
   }
 
