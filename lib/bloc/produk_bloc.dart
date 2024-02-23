@@ -9,51 +9,40 @@ class ProdukBloc {
     String apiUrl = ApiUrl.listProduk;
 
     var response = await Api().get(apiUrl);
-    var jsonObj = json.decode(response.body);
+    var jsonObj = json.decode(response);
     List<Produk> produk = [];
-    for (var p in jsonObj) {
+    for (var p in jsonObj['data']) {
       produk.add(Produk.fromJson(p));
     }
     return produk;
   }
 
-  static Future<Produk> addProduk(
-      {required String nama,
-      required String harga,
-      required String stok,
-      required String deskripsi}) async {
+  static Future<Produk> addProduk({Produk? produk}) async {
     String apiUrl = ApiUrl.createProduk;
 
     var body = {
-      'nama': nama,
-      'harga': harga,
-      'stok': stok,
-      'deskripsi': deskripsi,
+      'kode_produk': produk!.kodeProduk,
+      'nama_produk': produk.namaProduk,
+      'harga': produk.harga.toString(),
     };
 
     var response = await Api().post(apiUrl, body);
-    var jsonObj = json.decode(response.body);
+    var jsonObj = json.decode(response);
     return Produk.fromJson(jsonObj);
   }
 
-  static Future<Produk> updateProduk(
-      {required String id,
-      required String nama,
-      required String harga,
-      required String stok,
-      required String deskripsi}) async {
-    String apiUrl = ApiUrl.updateProduk(id as int);
+  static Future updateProduk({Produk? produk}) async {
+    String apiUrl = ApiUrl.updateProduk(produk!.id);
 
     var body = {
-      'nama': nama,
-      'harga': harga,
-      'stok': stok,
-      'deskripsi': deskripsi,
+      'kode_produk': produk.kodeProduk,
+      'nama_produk': produk.namaProduk,
+      'harga': produk.harga.toString(),
     };
 
     var response = await Api().post(apiUrl, body);
-    var jsonObj = json.decode(response.body);
-    return Produk.fromJson(jsonObj);
+    var jsonObj = json.decode(response);
+    return jsonObj;
   }
 
   static Future<Produk> deleteProduk({required String id}) async {

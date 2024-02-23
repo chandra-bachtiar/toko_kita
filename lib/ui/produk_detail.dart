@@ -86,7 +86,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
           ),
         ),
         actions: [
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () {
               Navigator.pop(context);
             },
@@ -94,8 +94,10 @@ class _ProdukDetailState extends State<ProdukDetail> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context, true);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProdukForm(produk: widget.produk)));
             },
             child: const Text("Hapus"),
           ),

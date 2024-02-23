@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:toko_kita/bloc/login_bloc.dart';
+import 'package:toko_kita/helpers/user_info.dart';
+import 'package:toko_kita/ui/produk_page.dart';
 import 'package:toko_kita/ui/registrasi_page.dart';
+import 'package:toko_kita/widget/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,7 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // bool _isLoading = false;
+  bool _isLoading = false;
 
   final _emailTextboxController = TextEditingController();
   final _passwordTextboxController = TextEditingController();
@@ -78,9 +82,43 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
       child: const Text('Login'),
       onPressed: () {
-        // var validate = _formKey.currentState!.validate();
+        var validate = _formKey.currentState!.validate();
+        if (validate && !_isLoading) {
+          _submit();
+        }
       },
     );
+  }
+
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+
+    LoginBloc.login(
+            email: _emailTextboxController.text,
+            password: _passwordTextboxController.text)
+        .then((value) async {
+      print(value);
+      await UserInfo().setToken(value.token.toString());
+      await UserInfo().setUserId(value.userId);
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const ProdukPage()));
+    }, onError: (error) {
+      print(error);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => const WarningDialog(
+          description: 'Login Gagal, Email atau password salah',
+        ),
+      );
+    });
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Widget _menuRegistrasi() {

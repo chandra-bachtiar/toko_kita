@@ -17,9 +17,9 @@ class Login {
     return Login(
       code: obj['code'] as int,
       status: obj['status'] as bool,
-      token: obj['token'] as String,
-      userId: obj['userId'] as int,
-      userEmail: obj['userEmail'] as String,
+      token: obj['data']['token'] as String,
+      userId: obj['data']['user']['id'] as int,
+      userEmail: obj['data']['user']['email'] as String,
     );
   }
 }

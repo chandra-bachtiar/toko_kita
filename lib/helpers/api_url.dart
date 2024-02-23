@@ -1,5 +1,5 @@
 class ApiUrl {
-  static const String baseUrl = 'http://192.168.9.102:8800/';
+  static const String baseUrl = 'http://192.168.10.182:8800/';
 
   static const String registrasi = '${baseUrl}registrasi';
   static const String login = '${baseUrl}login';
@@ -7,7 +7,7 @@ class ApiUrl {
   static const String createProduk = '${baseUrl}produk';
 
   static String updateProduk(int id) {
-    return '${baseUrl}produk/$id';
+    return '${baseUrl}produk/$id/update';
   }
 
   static String showProduk(int id) {

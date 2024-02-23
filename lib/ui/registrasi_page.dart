@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toko_kita/bloc/registrasi_bloc.dart';
+import 'package:toko_kita/widget/success_dialog.dart';
 
 class RegistrasiPage extends StatefulWidget {
   const RegistrasiPage({super.key});
@@ -10,7 +12,7 @@ class RegistrasiPage extends StatefulWidget {
 
 class _RegistrasiPageState extends State<RegistrasiPage> {
   final _formKey = GlobalKey<FormState>();
-  // bool _isLoading = false;
+  bool _isLoading = false;
 
   final _namaTextboxController = TextEditingController();
   final _emailTextboxController = TextEditingController();
@@ -104,12 +106,52 @@ class _RegistrasiPageState extends State<RegistrasiPage> {
   Widget _buttonRegistrasi() {
     return ElevatedButton(
       onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          // Process data.
+        var validate = _formKey.currentState!.validate();
+        if (validate && !_isLoading) {
+          print("Registrasi");
+          _submit();
         }
       },
       child: const Text('Registrasi'),
     );
+  }
+
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+
+    RegistrasiBloc.registrasi(
+            nama: _namaTextboxController.text,
+            email: _emailTextboxController.text,
+            password: _passwordTextboxController.text)
+        .then((value) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => SuccessDialog(
+          description: 'Registrasi berhasil',
+          okClick: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }, onError: (error) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => SuccessDialog(
+          description: 'Registrasi gagal',
+          okClick: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    });
+    setState(() {
+      _isLoading = false;
+    });
   }
 }
 

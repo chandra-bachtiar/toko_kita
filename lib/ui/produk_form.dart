@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:toko_kita/bloc/produk_bloc.dart';
 import 'package:toko_kita/model/produk.dart';
+import 'package:toko_kita/ui/produk_page.dart';
+import 'package:toko_kita/widget/warning_dialog.dart';
 
 // ignore: must_be_immutable
 class ProdukForm extends StatefulWidget {
@@ -12,7 +15,7 @@ class ProdukForm extends StatefulWidget {
 
 class _ProdukFormState extends State<ProdukForm> {
   final _formKey = GlobalKey<FormState>();
-  // bool _isLoading = false;
+  bool _isLoading = false;
   String judul = "Tambah Produk";
   String tombolSubmit = "Tambah";
 
@@ -114,8 +117,68 @@ class _ProdukFormState extends State<ProdukForm> {
     return ElevatedButton(
       child: Text(tombolSubmit),
       onPressed: () {
-        //  var validate = _formKey.currentState!.validate();
+        var validate = _formKey.currentState!.validate();
+        if (validate) {
+          if (!_isLoading) {
+            if (widget.produk != null) {
+              _update();
+            } else {
+              _submit();
+            }
+          }
+        }
       },
     );
+  }
+
+  _submit() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    Produk createProduk =
+        Produk(id: 1, harga: 0, kodeProduk: '', namaProduk: '');
+    createProduk.kodeProduk = _kodeProdukTextboxController.text;
+    createProduk.namaProduk = _namaProdukTextboxController.text;
+    createProduk.harga = int.parse(_hargaProdukTextboxController.text);
+
+    ProdukBloc.addProduk(produk: createProduk).then((value) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const ProdukPage()));
+    }, onError: (error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              const WarningDialog(description: "Gagal menambahkan produk"));
+    });
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  _update() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    Produk updateProduk =
+        Produk(id: 1, harga: 0, kodeProduk: '', namaProduk: '');
+    updateProduk.id = widget.produk!.id;
+    updateProduk.kodeProduk = _kodeProdukTextboxController.text;
+    updateProduk.namaProduk = _namaProdukTextboxController.text;
+    updateProduk.harga = int.parse(_hargaProdukTextboxController.text);
+
+    ProdukBloc.updateProduk(produk: updateProduk).then((value) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const ProdukPage()));
+    }, onError: (error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              const WarningDialog(description: "Gagal mengubah produk"));
+    });
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

@@ -9,6 +9,8 @@ class Api {
     var token = await UserInfo().getToken();
     var responseJson;
 
+    print("###### DATA : $data");
+
     try {
       final response = await http.post(
         Uri.parse(url),

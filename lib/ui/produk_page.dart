@@ -1,8 +1,12 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toko_kita/bloc/logout_bloc.dart';
+import 'package:toko_kita/bloc/produk_bloc.dart';
 import 'package:toko_kita/model/produk.dart';
 import 'package:toko_kita/ui/produk_form.dart';
 import 'package:toko_kita/ui/produk_detail.dart';
+
+import 'login_page.dart';
 
 class ProdukPage extends StatefulWidget {
   const ProdukPage({super.key});
@@ -15,75 +19,72 @@ class _ProdukPageState extends State<ProdukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("List Produk"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              child: const Icon(
-                Icons.add,
-                size: 26.0,
+        appBar: AppBar(
+          title: const Text("List Produk"),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                child: const Icon(
+                  Icons.add,
+                  size: 26.0,
+                ),
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProdukForm(),
+                    ),
+                  );
+                },
               ),
-              onTap: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProdukForm(),
-                  ),
-                );
-              },
             ),
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text("Logout"),
-              trailing: const Icon(Icons.logout),
-              onTap: () async {},
-            )
           ],
         ),
-      ),
-      body: ListView(
-        children: [
-          ItemProduk(
-            produk: Produk(
-                kodeProduk: "P001",
-                namaProduk: "Laptop",
-                harga: 10000000,
-                id: 1),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text("Logout"),
+                trailing: const Icon(Icons.logout),
+                onTap: () async {
+                  await LogoutBloc.logout().then((value) => {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()))
+                      });
+                },
+              )
+            ],
           ),
-          ItemProduk(
-            produk: Produk(
-                kodeProduk: "P002",
-                namaProduk: "Printer",
-                harga: 2000000,
-                id: 2),
-          ),
-          ItemProduk(
-            produk: Produk(
-                kodeProduk: "P003",
-                namaProduk: "Monitor",
-                harga: 3000000,
-                id: 3),
-          ),
-          ItemProduk(
-            produk: Produk(
-                kodeProduk: "P004", namaProduk: "Mouse", harga: 500000, id: 4),
-          ),
-          ItemProduk(
-            produk: Produk(
-                kodeProduk: "P005",
-                namaProduk: "Keyboard",
-                harga: 400000,
-                id: 5),
-          ),
-        ],
-      ),
+        ),
+        body: FutureBuilder<List>(
+            future: ProdukBloc.getProduk(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text("Error");
+              } else if (snapshot.hasData) {
+                return ListProduk(list: snapshot.data);
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }));
+  }
+}
+
+class ListProduk extends StatelessWidget {
+  final List? list;
+  const ListProduk({Key? key, this.list}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: list == null ? 0 : list!.length,
+      itemBuilder: (context, i) {
+        return ItemProduk(produk: list![i] as Produk);
+      },
     );
   }
 }
