@@ -20,26 +20,96 @@ class _ProdukDetailState extends State<ProdukDetail> {
       ),
       body: Center(
         child: Expanded(
-          child: Column(
-            children: [
-              Text(
-                "Kode Produk: ${widget.produk.kodeProduk}",
-                style: const TextStyle(fontSize: 20.0),
-              ),
-              Text(
-                "Nama Produk: ${widget.produk.namaProduk}",
-                style: const TextStyle(fontSize: 20.0),
-              ),
-              Text(
-                "Harga Produk: ${widget.produk.harga}",
-                style: const TextStyle(fontSize: 20.0),
-              ),
-              SizedBox(height: 100, child: _tombolHapusEdit()),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Kode Produk",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.produk.kodeProduk,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Nama Produk",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.produk.namaProduk,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Harga Produk",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    formatRupiah(widget.produk.harga),
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 100, child: _tombolHapusEdit()),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  String formatRupiah(int amount) {
+    // Ubah angka menjadi string dan reverse agar mudah dimasukkan separator
+    String amountString = amount.toString().split('').reversed.join();
+
+    // Buat variabel untuk menampung hasil format
+    String formattedAmount = '';
+
+    // Lakukan iterasi terhadap string angka yang sudah direverse
+    for (int i = 0; i < amountString.length; i++) {
+      // Tambahkan separator setiap 3 digit
+      if (i % 3 == 0 && i != 0) {
+        formattedAmount += '.';
+      }
+      // Tambahkan digit angka
+      formattedAmount += amountString[i];
+    }
+
+    // Balik kembali string agar urutan digit benar
+    formattedAmount = formattedAmount.split('').reversed.join();
+
+    // Tambahkan prefix 'Rp. ' sebelum angka
+    formattedAmount = 'Rp. $formattedAmount';
+
+    return formattedAmount;
   }
 
   Widget _tombolHapusEdit() {
